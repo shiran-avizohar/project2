@@ -1,117 +1,103 @@
 "use strict";
 
 (async () => {
-
-        const fetchBitcoinData = async () => {
-            const url = 'https://api.coingecko.com/api/v3/coins/bitcoin';
-            const response = await fetch(url);
-            const data = await response.json();
-    
-            // עדכון התמונה
-            const bitcoinImage = document.getElementById('bitcoinImage');
-            bitcoinImage.src = data.image.large;
-    
-            // עדכון מחירים
-            document.getElementById('usdPrice').textContent = `$${data.market_data.current_price.usd}`;
-            document.getElementById('eurPrice').textContent = `€${data.market_data.current_price.eur}`;
-            document.getElementById('ilsPrice').textContent = `₪${data.market_data.current_price.ils}`;
-        };
-    
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchBitcoinData(); // מבצע את קריאת ה-API בעת טעינת הדף
-        });
-
-
-    document.addEventListener('DOMContentLoaded', () => {
-        // הפונקציה להסתיר ולהציג את ה-sections
+    document.addEventListener("DOMContentLoaded", () => {
         const toggleSections = (sectionToShow) => {
-            // נסיר את כל התצוגות הנוכחיות
-            const sections = document.querySelectorAll('main section');
-            sections.forEach(section => {
-                section.classList.add('d-none');  // נסתר את כל ה-sections
-            });
-    
-            // נוודא שה-sections המתאים מוצג
+            // הסתרת כל הסקשנים
+            const sections = document.querySelectorAll("main section");
+            sections.forEach((section) => section.classList.add("d-none"));
+
+            // הצגת הסקשן המבוקש
             const section = document.getElementById(sectionToShow);
             if (section) {
-                section.classList.remove('d-none');  // נוודא שה-`section` המתאים יוצג
+                section.classList.remove("d-none");
+
+                // רינדור המטבעות רק אם אנחנו בעמוד COINS
+                if (sectionToShow === "coins") {
+                    renderCoins();
+                }
             }
         };
-    
+
         // מאזינים ללחיצות על כפתורי הניווט
-        document.getElementById('navCoins').addEventListener('click', () => {
-            toggleSections('coins');  // מציג את עמוד המטבעות
+        document.getElementById("navCoins").addEventListener("click", () => {
+            toggleSections("coins");
         });
-    
-        document.getElementById('navReports').addEventListener('click', () => {
-            toggleSections('reports');  // מציג את עמוד הדוחות
+
+        document.getElementById("navReports").addEventListener("click", () => {
+            toggleSections("reports");
         });
-    
-        document.getElementById('navAbout').addEventListener('click', () => {
-            toggleSections('about');  // מציג את עמוד האודות
+
+        document.getElementById("navAbout").addEventListener("click", () => {
+            toggleSections("about");
         });
-    
-        // ברירת מחדל - נוודא שהעמוד הראשון מוצג כשנטען
-        toggleSections('coins');  // מציג את עמוד המטבעות כבר מההתחלה
+
+        // ברירת מחדל: הצגת עמוד ה-COINS בעת טעינה
+        toggleSections("coins");
     });
 
+    const getData = async (url) => fetch(url).then((response) => response.json());
 
+    // רינדור המטבעות
+    const renderCoins = async () => {
+        try {
+            let coins = await getData("https://api.coingecko.com/api/v3/coins/list");
+            coins = coins.slice(0, 100); // מגבילים ל-100 מטבעות
 
-    const getData = async (url) => fetch(url).then(response => response.json())
+            const html = coins
+                .map(
+                    (coin) => `
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">${coin.name}</h5>
+                        <p class="card-text">ID: ${coin.id}</p>
+                        <p class="card-text">Symbol: ${coin.symbol}</p>
+                        <button class="btn btn-primary more-info-btn" data-coin="${coin.id}">More Info</button>
+                    </div>
+                </div>`
+                )
+                .join("");
 
-    const fetchRetry = async (url) => {
-        let isSuccess = false;
-        do {
-            try {
-                const data = await getData(url)
-                isSuccess = true
-            } catch (e) {
-                setTimeout(() => {
-                    fetchRetry(url)
-                }, 5000)               
-            }
-        } while (!isSuccess)
-    }
+            document.getElementById("cards-container").innerHTML = html;
 
-    
+            // מאזינים ללחיצות על כפתורי "More Info"
+            document.querySelectorAll(".more-info-btn").forEach((button) => {
+                button.addEventListener("click", async (event) => {
+                    const coinId = event.target.dataset.coin;
+                    const coinData = await getData(`https://api.coingecko.com/api/v3/coins/${coinId}`);
+                    showCoinInfo(coinData);
+                });
+            });
+        } catch (error) {
+            console.error("Error fetching or rendering coins:", error);
+        }
+    };
 
-    const getAllCoins = async () => getData('https://api.coingecko.com/api/v3/coins/list')
+    // פונקציה להצגת מידע נוסף על מטבע בחלונית
+    const showCoinInfo = (coin) => {
+        const modalHtml = `
+            <div class="modal fade" id="coinModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">${coin.name} (${coin.symbol.toUpperCase()})</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Market Cap Rank: ${coin.market_cap_rank}</p>
+                            <p>Current Price (USD): $${coin.market_data?.current_price?.usd || "N/A"}</p>
+                            <p>Description: ${coin.description?.en || "No description available"}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        document.body.insertAdjacentHTML("beforeend", modalHtml);
+        const modal = new bootstrap.Modal(document.getElementById("coinModal"));
+        modal.show();
 
-    const getSingleCoin = async (coin) => fetchRetry(`https://api.coingecko.com/api/v3/coins/${coin}`)
-    const getGraphData = async (coins) => getData(`https://min-api.cryptocompare.com/data/pricemulti?fsyms=${coins.join(',')}&tsyms=USD`);
-    let coins = await getAllCoins();
-    coins = coins.slice(0,100);
-    console.log(coins)
-    const search = prompt('search coins')
-    const filtered = coins.filter(coin => coin.name.includes(search)).splice(0, 100)
-    console.log(filtered)
-    const html = coins
-        .map(coin => `
-            <div class="card-group">
-            <div class="card" style="width: 18rem;">
-            <img src="https://api.coingecko.com/api/v3/coins/bitcoin${coin.image}" class="card-img-top" alt="${coin.name}">
-            <div class="card-body">
-                <h5 class="card-title">${coin.name}</h5>
-                <p class="card-text">${coin.id}</p>
-                <p class="card-text">${coin.symbol}</p>
-                <a href="https://www.coingecko.com/en/coins/${coin.id}" class="btn btn-primary">More Info</a>
-            </div>
-        </div>
-        `)
-        .join('')
-
-
-
-
-
-    document.getElementById('cards-container').innerHTML = html;
-
-    const buttonClicked = function () {
-        console.log(this.id)
-    }
-
-    document.querySelectorAll('#cards-container button').forEach(button => button.addEventListener('click', buttonClicked))
-
-
-})()
-
+        // ניקוי החלונית מה-HTML אחרי סגירה
+        document.getElementById("coinModal").addEventListener("hidden.bs.modal", () => {
+            document.getElementById("coinModal").remove();
+        });
+    };
+})();

@@ -10,58 +10,51 @@
     <title>Bitcoin</title>
 </head>
 <body> 
-    <div id="menu">   
-        <button id='buttonSearch'>Search</button>
-        <input id='searchInput' placeholder="Search..." required>
+    <div id="menu" class="input-group flex-nowrap">  
+        
+ 
+        <button class="input-group-text" id="addon-wrapping"> Search </button>
+        <input type="text" class="form-control" placeholder="Search..." aria-label="Username" aria-describedby="addon-wrapping">
     </div>
 
-    <h1 class="title">Virtual trading information</h1>
 
-    <ul class="nav nav-tabs">
+    <h1 class="title"> Virtual trading information</h1>
+    <div>
+    <img id='img' src="assets\img\BITCOIN.webp" class="img-fluid" alt="Bitcoin">
+    </div>
+
+
+     <ul class="nav nav-tabs">
         <li class="nav-item">
             <a class="nav-link active" id="navCoins" href="#coins" data-bs-toggle="tab">Coins</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="navReports" href="#reports" data-bs-toggle="tab">Reports</a>
+            <a class="nav-link" id="navReports"  href="#reports" data-bs-toggle="tab">Reports</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" id="navAbout" href="#about" data-bs-toggle="tab">About</a>
         </li>
-    </ul>
+    </ul>   
+
 
     <main id="main">
-        <section id="coins">
-            <h2>Bitcoin Info</h2>
-            <div id="bitcoinInfo">
-                <!-- המידע יתווסף כאן -->
-            </div>
+        <section id="coins">    
+            <div id="cards-container"></div>
 
-            <button id="buttonMoreInfo" data-bs-toggle="modal" data-bs-target="#moreInfoModal">More Info</button>
-
-            <div class="modal fade" id="moreInfoModal" tabindex="-1" aria-labelledby="moreInfoModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="moreInfoModalLabel">Bitcoin Info</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <h2 class="fs-5">Prices</h2>
-                            <ul>
-                                <li>USD: <span id="usdPrice"></span></li>
-                                <li>EUR: <span id="eurPrice"></span></li>
-                                <li>ILS: <span id="ilsPrice"></span></li>
-                            </ul>
-                            <hr>
-                            <h2 class="fs-5">Image</h2>
-                            <img id="bitcoinImage" class="img-fluid" alt="Bitcoin">
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <br>
+        <button id="buttonMoreInfo" > More Info</button> 
+        <br>
+       <div id="moreInfo" class="modal-dialog modal-dialog-centered"> 
+       
+        <ul>   
+            <li> Usd: </li>
+            <li> lls: </li>
+            <li> Eur: </li>
+        </ul>
+        </div>
         </section>
 
-        <section class="tab-pane fade" id="reports" role="tabpanel">
+        <section  class="tab-pane fade" id="reports" role="tabpanel">
             this is reports page
         </section>
 
@@ -70,7 +63,11 @@
         </section>
     </main>
 
-    <div id="cards-container"></div>
+
+
+
+    </div>
+
 
 </body>
 </html>
