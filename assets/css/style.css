@@ -1,0 +1,15 @@
+.title {
+    font-family: cursive;
+    font-size: 30px;
+    color: gold;
+    display: flex;
+    justify-content: center; 
+
+}
+
+.img {
+    max-width: 100%; 
+    height: auto; 
+    margin-bottom: 20px;
+}
+
