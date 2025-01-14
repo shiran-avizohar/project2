@@ -2,6 +2,26 @@
 
 (async () => {
 
+        const fetchBitcoinData = async () => {
+            const url = 'https://api.coingecko.com/api/v3/coins/bitcoin';
+            const response = await fetch(url);
+            const data = await response.json();
+    
+            // עדכון התמונה
+            const bitcoinImage = document.getElementById('bitcoinImage');
+            bitcoinImage.src = data.image.large;
+    
+            // עדכון מחירים
+            document.getElementById('usdPrice').textContent = `$${data.market_data.current_price.usd}`;
+            document.getElementById('eurPrice').textContent = `€${data.market_data.current_price.eur}`;
+            document.getElementById('ilsPrice').textContent = `₪${data.market_data.current_price.ils}`;
+        };
+    
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchBitcoinData(); // מבצע את קריאת ה-API בעת טעינת הדף
+        });
+
+
     document.addEventListener('DOMContentLoaded', () => {
         // הפונקציה להסתיר ולהציג את ה-sections
         const toggleSections = (sectionToShow) => {
