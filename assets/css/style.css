@@ -1,16 +1,131 @@
+
+@font-face {
+    font-family: 'Money3D';
+    src: url('assets/fonts/Money3D.ttf') format('truetype');
+}
+
 .title {
-    font-family: cursive;
+    font-family: 'Money3D', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-size: 30px;
     color: gold;
-    display: flex;
-    justify-content: center; 
+    text-align: center;
+    margin-bottom: 20px;
+}
 
+#menu {
+    display: flex;
+    justify-content: space-between; /* פיזור בין האלמנטים */
+    align-items: center !important; /* מיישר את האלמנטים בגובה */
+    margin-bottom: 20px !important; /* מרווח תחתון */
+}
+
+
+.img-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
 }
 
 .img {
-    max-width: 100%; 
-    height: auto; 
-    margin-bottom: 20px;
-    size: 20px;
+    max-width: 10%;
+    height: auto;
+    border-radius: 8px;
 }
 
+/* לוודא שהכרטיסים לא מושפעים מהשינויים */
+.card {
+    margin-bottom: 20px; /* מרווח בין כרטיסים */
+    text-align: center; /* ממרכז את הטקסט בתוך הכרטיס */
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.more-info-btn {
+    background-color: rgba(255, 225, 52, 0.833) !important;
+    color: white !important;
+    border: 2px solid gold !important;
+}
+
+.modal img {
+    max-width: 150px; /* רוחב מקסימלי */
+    height: auto; /* שומר על הפרופורציות */
+    margin: 0 auto; /* ממרכז את התמונה */
+    display: block; /* מבטיח שהתמונה תהיה אלמנט בלוק */
+}
+
+/* 
+ .img-container img {
+    width: 600px; 
+    height: auto;  
+    max-width: 100%; 
+} */
+
+
+.coin-card {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+    width: 250px;
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: top;
+}
+
+.coin-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.coin-checkbox {
+    margin-top: 10px;
+}
+
+
+
+/* עיצוב של כרטיס המטבע */
+.card {
+    position: relative; /* מאפשר למקם אלמנטים בתוך הכרטיס בצורה מוחלטת */
+    width: 18rem; /* גודל הכרטיס */
+    margin: 10px; /* רווחים בין כרטיסים */
+}
+
+/* עיצוב הצ'קבוקס */
+.coin-checkbox {
+    position: absolute; /* ממקם את הצ'קבוקס באופן מוחלט */
+    top: 10px; /* רווח מהחלק העליון של הכרטיס */
+    left: 10px; /* רווח מהחלק השמאלי של הכרטיס */
+    width: 24px; /* גודל הצ'קבוקס */
+    height: 24px; /* גובה הצ'קבוקס */
+    cursor: pointer; /* משנה את הסמן בעת חיפוש על הצ'קבוקס */
+    background-color: #fff; /* רקע לבן */
+    border: 2px solid #ccc; /* גבול אפור */
+    border-radius: 4px; /* עגלגל את הקצוות */
+}
+
+
+
+/* סגנון של הסימון על הצ'קבוקס */
+.coin-checkbox:checked:before {
+    position: absolute;
+    top: -2px; /* להזיז את הסימון טיפה למעלה */
+    left: 0; /* להזיז את הסימון לצד שמאל */
+    font-size: 16px; /* גודל הסימן */
+    color: #fff; /* צבע הסימון לבן */
+    opacity: 1; /* מציג את הסימון */
+    transition: opacity 0.2s ease; /* אנימציה חלקה לשינוי */
+}
+
+/* כאשר הצ'קבוקס מסומן */
+.coin-checkbox:checked {
+    border: 2px solid #FFD700 !important; /* גבול צבע זהב כשהצ'קבוקס מסומן */
+}
+
+/* כאשר הצ'קבוקס לא מסומן */
+.coin-checkbox {
+    border: 2px solid #ccc !important; /* גבול אפור ברירת המחדל */
+}
