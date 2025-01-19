@@ -1,6 +1,7 @@
 "use strict";
 
 (async () => {
+    // קוד להפעלת טאב-ים
     document.addEventListener("DOMContentLoaded", () => {
         const toggleSections = (sectionToShow) => {
             const sections = document.querySelectorAll("main section");
@@ -31,6 +32,7 @@
         toggleSections("coins");
     });
 
+    // שליפת נתונים מה-API
     const getData = async (url) => {
         try {
             const response = await fetch(url);
@@ -42,31 +44,37 @@
         }
     };
 
+    // הצגת כרטיסי המטבעות
     const renderCoins = async () => {
         try {
             let coins = await getData("https://api.coingecko.com/api/v3/coins/list");
-            coins = coins.slice(0, 100);
+            coins = coins.slice(0, 100);  // בוחרים את 100 המטבעות הראשונים
+            
+            const selectedCoins = loadSelectedCoins(); // טוענים את המטבעות שנבחרו
 
             const html = coins
                 .map(
-                    (coin) => `
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">${coin.name}</h5>
-                        <p class="card-text">ID: ${coin.id}</p>
-                        <p class="card-text">Symbol: ${coin.symbol}</p>
-                        <button class="btn btn-primary more-info-btn" data-coin="${coin.id}">More Info</button>
-                    </div>
-                            <label for="coinChoose">
-            <input type="checkbox" class="coin-checkbox" id="chooseCoin">
-        
-        </label>
-                </div>`
+                    (coin) => {
+                        const isChecked = selectedCoins.includes(coin.id) ? "checked" : ""; // בודקים אם המטבע נבחר
+                        return `
+                            <div class="card" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title">${coin.name}</h5>
+                                    <p class="card-text">ID: ${coin.id}</p>
+                                    <p class="card-text">Symbol: ${coin.symbol}</p>
+                                    <button class="btn btn-primary more-info-btn" data-coin="${coin.id}">More Info</button>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input coin-switch" type="checkbox" role="switch" id="switch-${coin.id}" ${isChecked}>
+                                    <label class="form-check-label" for="switch-${coin.id}">Select ${coin.name}</label>
+                                </div>
+                            </div>`;
+                    }
                 )
                 .join("");
-
+    
             document.getElementById("cards-container").innerHTML = html;
-
+    
             document.querySelectorAll(".more-info-btn").forEach((button) => {
                 button.addEventListener("click", async (event) => {
                     const coinId = event.target.dataset.coin;
@@ -74,38 +82,51 @@
                     showCoinInfo(coinData);
                 });
             });
-
-
-
-            // טפל בבחירת מטבעות כאן
-            document.querySelectorAll('.coin-checkbox').forEach(function(checkbox) {
-                checkbox.addEventListener('change', function() {
+    
+            // טיפול בבחירת מטבעות עם Switch
+            document.querySelectorAll('.coin-switch').forEach(function(switchElement) {
+                switchElement.addEventListener('change', function() {
+                    // עדכון תצוגת המטבעות שנבחרו
+                    updateSelectedCoinsDisplay();
+            
                     // סופר את כמות המטבעות המסומנים
-                    let selectedCoins = document.querySelectorAll('.coin-checkbox:checked').length;
-
-                    // אם נבחרו יותר מ-5 מטבעות, מבטלים את הסימון הנוכחי ומציגים את ההתראה
+                    let selectedCoins = document.querySelectorAll('.coin-switch:checked').length;
+            
                     if (selectedCoins > 5) {
-                        checkbox.checked = false; // מבטל את הסימון האחרון
-                        alert("You can select up to 5 coins only. if you want you can change it.");
+                        switchElement.checked = false; // מבטל את הסימון האחרון
+                        alert("You can select up to 5 coins only.");
                     } else {
-                        // מציג את המידע בקונסול
-                        if (checkbox.checked) {
-                            console.log('Coin selected: ' + checkbox.id);
+                        if (switchElement.checked) {
+                            console.log('Coin selected: ' + switchElement.id);
                         } else {
-                            console.log('Coin unselected: ' + checkbox.id);
+                            console.log('Coin unselected: ' + switchElement.id);
                         }
                     }
+
+                    saveSelectedCoins(); // שומרים את המטבעות שנבחרו
                 });
             });
-
         } catch (error) {
             console.error("Error fetching or rendering coins:", error);
         }
     };
 
-            
-;
+    // עדכון תצוגת המטבעות שנבחרו
+    const updateSelectedCoinsDisplay = () => {
+        const selectedCoins = loadSelectedCoins(); // טוענים את המטבעות שנבחרו
+        
+        const selectedCoinsContainer = document.getElementById('selected-coins-container');
+        selectedCoinsContainer.innerHTML = ''; // מחיקת התצוגה הקודמת
+    
+        selectedCoins.forEach(coinId => {
+            const coinElement = document.createElement('div');
+            coinElement.classList.add('selected-coin');
+            coinElement.innerText = `Selected: ${coinId}`;
+            selectedCoinsContainer.appendChild(coinElement);
+        });
+    };
 
+    // הצגת מידע על מטבע במודל
     const showCoinInfo = (coin) => {
         const modalHtml = `
             <div class="modal fade" id="coinModal" tabindex="-1" aria-hidden="true">
@@ -135,89 +156,96 @@
             document.getElementById("coinModal").remove();
         });
     };
-})();
 
+    // שמירה של המטבעות שנבחרו ב-localStorage
+    const saveSelectedCoins = () => {
+        const selectedCoins = Array.from(document.querySelectorAll('.coin-switch:checked')).map(switchElement => switchElement.id.split('-')[1]);
+        localStorage.setItem('selectedCoins', JSON.stringify(selectedCoins));
+    };
 
-let selectedCoins = [];
+    // טעינת המטבעות שנבחרו מתוך ה-localStorage
+    const loadSelectedCoins = () => {
+        const savedCoins = localStorage.getItem('selectedCoins');
+        return savedCoins ? JSON.parse(savedCoins) : [];
+    };
 
-function getPrices() {
-    if (selectedCoins.length === 0) return;
+    // יצירת הגרף
+    let chart; // הגרף עצמו
+    let dataPoints = {}; // נקודות הנתונים
 
-    const symbols = selectedCoins.join(','); // ליצור רשימה של מטבעות נבחרים
-    const url = `https://min-api.cryptocompare.com/data/pricemulti?fsyms=${symbols}&tsyms=USD`;
+    const initializeChart = () => {
+        chart = new CanvasJS.Chart("chartContainer", {
+            title: {
+                text: "Cryptocurrency Price Chart"
+            },
+            axisX: {
+                title: "Time"
+            },
+            axisY: {
+                title: "Price (USD)"
+            },
+            data: [],
+        });
+        chart.render();
+    };
 
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            let chartData = [];
-            const colors = ['#FF5733', '#33FF57', '#3357FF', '#FF33A8', '#FFFF33']; // צבעים עבור כל מטבע
-
-            let index = 0;
-            for (const coin in data) {
-                if (data.hasOwnProperty(coin)) {
-                    chartData.push({
-                        type: "line", // שים לב לשינוי כאן - סוג הגרף הוא "line"
-                        name: coin,
-                        showInLegend: true,
-                        dataPoints: [{ label: new Date().toLocaleTimeString(), y: data[coin].USD }],
-                        color: colors[index] // הגדרת הצבע לפי סדר
-                    });
-                    index++;
-                }
+    // עדכון הגרף
+    const updateChart = (data) => {
+        const currentTime = new Date();
+    
+        if (!chart) {
+            console.error("Chart is not initialized yet.");
+            return;
+        }
+        console.log(data)
+        Object.keys(data).forEach((coin, index) => {
+            // אם לא קיים קו עבור המטבע, נוסיף אותו
+            if (!dataPoints[coin]) {
+                dataPoints[coin] = [];
+                chart.options.data.push({
+                    type: "line",
+                    name: coin, // שם המטבע שיופיע בלגנד של הגרף
+                    showInLegend: true,
+                    dataPoints: dataPoints[coin],
+                    color: getRandomColor(index), // צבע שונה לכל מטבע
+                });
             }
-
-            // הגדרת הגרף
-            const chart = new CanvasJS.Chart("chartContainer", {
-                title: {
-                    text: "Real-time Cryptocurrency Prices"
-                },
-                axisX: {
-                    title: "Time",
-                    interval: 1,
-                    labelAngle: -45 // הצגת תוויות הציר X בצורה קריאה
-                },
-                axisY: {
-                    title: "Price (USD)"
-                },
-                legend: {
-                    cursor: "pointer",
-                    itemclick: function(e) {
-                        if (e.dataSeries.visible === undefined || e.dataSeries.visible) {
-                            e.dataSeries.visible = false;
-                        } else {
-                            e.dataSeries.visible = true;
-                        }
-                        chart.render();
-                    }
-                },
-                data: chartData
+    
+            // עדכון נקודות הנתונים
+            dataPoints[coin].push({
+                x: currentTime,
+                y: data[coin].USD
             });
-
-            chart.render();
-        })
-        .catch(error => console.error('Error fetching data:', error));
-}
-
-// עדכון כל 2 שניות
-setInterval(getPrices, 2000);
-
-// ניהול כפתורי ה-toggle
-document.querySelectorAll(".toggle-coin").forEach(button => {
-    button.addEventListener('click', function() {
-        const coinId = this.id.replace('toggle-', ''); // מזהה המטבע
-        if (this.classList.contains('active')) {
-            this.classList.remove('active');
-            selectedCoins = selectedCoins.filter(coin => coin !== coinId);
-        } else {
-            this.classList.add('active');
-            if (!selectedCoins.includes(coinId)) {
-                selectedCoins.push(coinId);
+    
+            // אם יש יותר מדי נקודות, נרצה להוריד את הישנות ביותר
+            if (dataPoints[coin].length > 30) {
+                dataPoints[coin].shift();
             }
-        }
+        });
+    
+        chart.render();
+    };
 
-        // אם יש מטבעות שנבחרו, נבצע קריאה לעדכון הגרף
-        if (selectedCoins.length > 0) {
-            getPrices(); // עדכון הגרף
+    // פונקציה שמחזירה צבע אקראי לכל מטבע
+    const getRandomColor = (index) => {
+        const colors = ["#FF5733", "#33FF57", "#3357FF", "#FF33A8", "#FF8C33"];
+        return colors[index % colors.length];
+    };
+
+    // אתחול הגרף לפני התחלת העדכון
+    initializeChart();
+
+    // עדכון המחיר כל 2 שניות
+    setInterval(async () => {
+        const selectedCoins = Array.from(document.querySelectorAll('.coin-switch:checked')).map(switchElement => switchElement.id.split('-')[1]);
+        if (selectedCoins.length === 0) return;
+
+        try {
+            console.log("ss", selectedCoins)
+            const coinsData = await getData(`https://min-api.cryptocompare.com/data/pricemulti?fsyms=${selectedCoins.join(',')}&tsyms=USD`);
+            updateChart(coinsData);
+        } catch (error) {
+            console.error("Error fetching coin data:", error);
         }
-    });
-});
+    }, 2000); // כל 2 שניות
+})();
