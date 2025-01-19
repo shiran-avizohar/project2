@@ -53,25 +53,22 @@
             const selectedCoins = loadSelectedCoins(); // טוענים את המטבעות שנבחרו
 
             const html = coins
-                .map(
-                    (coin) => {
-                        const isChecked = selectedCoins.includes(coin.id) ? "checked" : ""; // בודקים אם המטבע נבחר
-                        return `
-                            <div class="card" style="width: 18rem;">
-                                <div class="card-body">
-                                    <h5 class="card-title">${coin.name}</h5>
-                                    <p class="card-text">ID: ${coin.id}</p>
-                                    <p class="card-text">Symbol: ${coin.symbol}</p>
-                                    <button class="btn btn-primary more-info-btn" data-coin="${coin.id}">More Info</button>
-                                </div>
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input coin-switch" type="checkbox" role="switch" id="switch-${coin.id}" ${isChecked}>
-                                    <label class="form-check-label" for="switch-${coin.id}">Select ${coin.name}</label>
-                                </div>
-                            </div>`;
-                    }
-                )
-                .join("");
+            .map(
+                (coin) => `
+            <div class="card coin-card" style="width: 18rem;" data-coin-name="${coin.name}">
+                <div class="card-body">
+                    <h5 class="card-title">${coin.name}</h5>
+                    <p class="card-text">ID: ${coin.id}</p>
+                    <p class="card-text">Symbol: ${coin.symbol}</p>
+                    <button class="btn btn-primary more-info-btn" data-coin="${coin.id}">More Info</button>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input coin-switch" type="checkbox" role="switch" id="switch-${coin.id}">
+                    <label class="form-check-label" for="switch-${coin.id}">Select ${coin.name}</label>
+                </div>
+            </div>`
+            )
+            .join("");
     
             document.getElementById("cards-container").innerHTML = html;
     
@@ -111,6 +108,8 @@
         }
     };
 
+
+    
     // עדכון תצוגת המטבעות שנבחרו
     const updateSelectedCoinsDisplay = () => {
         const selectedCoins = loadSelectedCoins(); // טוענים את המטבעות שנבחרו
@@ -249,3 +248,22 @@
         }
     }, 2000); // כל 2 שניות
 })();
+
+// פונקציה להחלת חיפוש על המטבעות
+const searchCoins = (searchText) => {
+    const coins = document.querySelectorAll('.coin-card');
+    coins.forEach((coin) => {
+        const coinName = coin.getAttribute('data-coin-name').toLowerCase();
+        if (coinName.includes(searchText.toLowerCase())) {
+            coin.style.display = 'block';  // הצגת המטבע
+        } else {
+            coin.style.display = 'none';  // הסתרת המטבע
+        }
+    });
+};
+
+// מאזין לשדה החיפוש
+document.getElementById("coinSearch").addEventListener("input", (e) => {
+    const searchText = e.target.value;
+    searchCoins(searchText);  // הפעלת החיפוש
+});

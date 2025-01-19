@@ -14,68 +14,95 @@
     <title>Bitcoin</title>
 </head>
 
-<body>
+<body> 
+
     <div class="container mt-5">
+        <h2 class="mb-4"></h2>
         <div id="toggle-container" class="d-flex flex-wrap gap-3">
             <!-- Toggles will be dynamically injected here -->
         </div>
     </div>
-
-    <div class="input-group flex-nowrap">  
-        <!-- <button class="input-group-text" id="addon-wrapping"> Search </button>
+    
+    <div id="menu" class="input-group flex-nowrap">  
+        
+<!--  
+        <button class="input-group-text" id="addon-wrapping"> Search </button>
         <input type="text" class="form-control" placeholder="Search..." aria-label="Username" aria-describedby="addon-wrapping"> -->
     </div>
 
+
     <h1 class="title"> Cryptonite</h1>
     <div class="img-container">
-        <img id='img' src="assets/img/BITCOIN.webp" class="img-fluid" alt="Bitcoin">
+    <img id='img' src="assets/img/BITCOIN.webp" class="img-fluid" alt="Bitcoin">
     </div>
 
-    <div class="text-search">
-        <button class="button-search">Search</button>
-        <input type="text" id="search-input" placeholder="Search for coins...">
-    </div>
+        <div class="text-search">
+            <button class="button-search">Search</button>
+            <input type="text" id="coinSearch" class="input-search" placeholder="Search..." aria-label="Username" aria-describedby="addon-wrapping">
+        </div>
 
-    <div class="d-flex justify-content-between align-items-center">
+    <div id="menu" class="d-flex justify-content-between align-items-center">
         <ul class="nav nav-tabs">
+
             <li class="nav-item">
                 <a class="nav-link active" id="navCoins" href="#coins" data-bs-toggle="tab">Coins</a>
             </li>
+
             <li class="nav-item">
                 <a class="nav-link" id="navReports" href="#reports" data-bs-toggle="tab">Reports</a>
-            </li>
+
+              </li>
+              
             <li class="nav-item">
                 <a class="nav-link" id="navAbout" href="#about" data-bs-toggle="tab">About</a>
             </li>
         </ul>
+    
+
     </div>
 
-    <main id="main">
-        <section id="coins">
+    <main id="main">        
+    </div>
+        <section id="coins">    
             <div id="cards-container" class="d-flex flex-wrap justify-content-start">
-                <br><br>
-                <div id="moreInfo" class="modal-dialog modal-dialog-centered"></div>
-            </div>
+        <br>
+        <br>
+       <div id="moreInfo" class="modal-dialog modal-dialog-centered"> 
+        </div>
         </section>
 
         <div id="coinsContainer">
-            <!-- List of displayed coins for the user -->
+            <!-- רשימת המטבעות שמוצגת למשתמש -->
         </div>
-
         <section id="reports" class="d-none">
             <div id="chartContainer" style="height: 400px; width: 100%;"></div>
-            <div id="selected-coins-container"></div> <!-- Place to display selected coins -->
+            <div id="selected-coins-container"></div> <!-- מקום להצגת המטבעות שנבחרו -->
         </section>
 
         <section class="tab-pane fade" id="about" role="tabpanel">
-            <h1>My name is Shiran Avizohar. I am 25 years old. I’m married and live in Kiryat Ata.
-                <br> Currently, I work at an insurance agency, and I am combining Fullstack Web development studies at John Bryce.
-                <br> I have a certificate in 3D animation and I completed a Bachelor's degree in Behavioral Sciences.
-                <br> I came to learn Fullstack because of my husband’s friend, and I really hope I succeed in this field, despite the challenges and the fact that it’s not easy to break into it quickly without a degree.
-                <br> Sometimes success takes time, and we need to go through different experiences and paths in order to find the right place for us.<br>
+            <h1>My name is Shiran Avizohar.
+                I am 25 years old.
+                I’m married and live in Kiryat Ata.
+                <br>
+                Currently, I work at an insurance agency, and I am combining Fullstack Web development studies at John Bryce.
+                <br>
+                I have a certificate in 3D animation and I completed a Bachelor's degree in Behavioral Sciences.
+                <br>
+                I came to learn Fullstack because of my husband’s friend, and I really hope I succeed in this field, despite the challenges and the fact that it’s not easy to break into it quickly without a degree.
+                <br>
+                Sometimes success takes time, and we need to go through different experiences and paths in order to find the right place for us.<br>
                 I hope this is my place. ☺</h1>
         </section>
+        
+        <input type="checkbox" class="form-check-input coin-checkbox" id="chooseCoin-${coin.id}">
+
+
+
     </main>
+    </div>
+
+
 </body>
+</html>
 
 </html>
