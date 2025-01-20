@@ -21,6 +21,8 @@
     gap: 10px; /* מרווח בין האלמנטים */
     margin-bottom: 20px;
     flex-direction: row-reverse; /* הופך את הסדר */
+    box-sizing: border-box; /* מוודא שהתוכן לא יגלוש */
+    width: 100%; /* תופס את כל רוחב הקונטיינר */
 }
 
 .text-search {
@@ -35,10 +37,6 @@
     padding: 0;
 }
 
-.input-search {
-    flex-shrink: 0; /* מונע מהאינפוט להתכווץ */
-
-}
 
 
 .img-container {

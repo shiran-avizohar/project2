@@ -58,13 +58,13 @@
             <div class="card coin-card" style="width: 18rem;" data-coin-name="${coin.name}">
                 <div class="card-body">
                     <h5 class="card-title">${coin.name}</h5>
-                    <p class="card-text">ID: ${coin.id}</p>
-                    <p class="card-text">Symbol: ${coin.symbol}</p>
+                    <p class="card-text"> ${coin.id}</p>
+                    <p class="card-text"></p>
                     <button class="btn btn-primary more-info-btn" data-coin="${coin.id}">More Info</button>
                 </div>
                 <div class="form-check form-switch">
                     <input class="form-check-input coin-switch" type="checkbox" role="switch" id="switch-${coin.id}">
-                    <label class="form-check-label" for="switch-${coin.id}">Select ${coin.name}</label>
+                    <label class="form-check-label" for="switch-${coin.id}"></label>
                 </div>
             </div>`
             )
@@ -72,6 +72,17 @@
     
             document.getElementById("cards-container").innerHTML = html;
     
+
+            selectedCoins.forEach((coinId) => {
+                const switchElement = document.getElementById(`switch-${coinId}`);
+                if (switchElement) {
+                    switchElement.checked = true;
+                }
+            });
+
+            updateSelectedCoinsDisplay();
+
+            
             document.querySelectorAll(".more-info-btn").forEach((button) => {
                 button.addEventListener("click", async (event) => {
                     const coinId = event.target.dataset.coin;

@@ -35,13 +35,12 @@
     <div class="img-container">
     <img id='img' src="assets/img/BITCOIN.webp" class="img-fluid" alt="Bitcoin">
     </div>
+    <div id="menu" class="d-flex justify-content-between align-items-center">
 
         <div class="text-search">
-            <button class="button-search">Search</button>
             <input type="text" id="coinSearch" class="input-search" placeholder="Search..." aria-label="Username" aria-describedby="addon-wrapping">
         </div>
 
-    <div id="menu" class="d-flex justify-content-between align-items-center">
         <ul class="nav nav-tabs">
 
             <li class="nav-item">
@@ -80,7 +79,7 @@
         </section>
 
         <section class="tab-pane fade" id="about" role="tabpanel">
-            <h1>My name is Shiran Avizohar.
+            <p id="about">My name is Shiran Avizohar.
                 I am 25 years old.
                 I’m married and live in Kiryat Ata.
                 <br>
@@ -91,7 +90,7 @@
                 I came to learn Fullstack because of my husband’s friend, and I really hope I succeed in this field, despite the challenges and the fact that it’s not easy to break into it quickly without a degree.
                 <br>
                 Sometimes success takes time, and we need to go through different experiences and paths in order to find the right place for us.<br>
-                I hope this is my place. ☺</h1>
+                I hope this is my place. ☺</p>
         </section>
         
         <input type="checkbox" class="form-check-input coin-checkbox" id="chooseCoin-${coin.id}">
