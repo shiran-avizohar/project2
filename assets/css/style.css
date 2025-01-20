@@ -117,6 +117,52 @@
     justify-content: space-between;
 }
 
+.text-search {
+        display: flex !important;
+        align-items: center !important;
+        margin-left: auto !important; /* ממקם את החיפוש בצד ימין */
+}
 
 
 
+
+/* הסתרת אלמנטים */
+.d-none {
+    display: none !important;
+}
+
+
+.coin-card:hover {
+    transform: scale(1.05);
+}
+
+
+/* סגנון של הגרף */
+#chartContainer {
+    margin-top: 20px;
+    width: 100%;
+    height: 400px;
+}
+
+/* סגנון למודל */
+.modal-header {
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #ddd;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+/* הצגת ה-switch למעלה בתוך כרטיס המטבע */
+.coin-card .form-check {
+    position: absolute;  /* כך ה-switch יוכל להיות מנותב על גבי הכרטיס */
+    top: 10px;  /* מיקום ממוקם למעלה */
+    left: 10px;  /* מיקום לצד ימין */
+    z-index: 10;  /* מבטיח שה-Switch יכסה מעל התוכן */
+}
+
+/* אם אתה רוצה לשפר עוד יותר את מראה ה-Switch */
+.coin-card .form-check .form-check-input {
+    transform: scale(1.3);  /* הגדלת הגודל של ה-Switch */
+}
