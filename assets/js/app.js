@@ -267,3 +267,4 @@ document.getElementById("coinSearch").addEventListener("input", (e) => {
     const searchText = e.target.value;
     searchCoins(searchText);  // הפעלת החיפוש
 });
+

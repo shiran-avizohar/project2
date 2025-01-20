@@ -55,12 +55,12 @@
     display: block; /* מבטיח שהתמונה תהיה אלמנט בלוק */
 }
 
-/* 
+
  .img-container img {
     width: 600px; 
     height: auto;  
     max-width: 100%; 
-} */
+}
 
 
 .coin-card {
@@ -94,38 +94,29 @@
     margin: 10px; /* רווחים בין כרטיסים */
 }
 
-/* עיצוב הצ'קבוקס */
-.coin-checkbox {
-    position: absolute; /* ממקם את הצ'קבוקס באופן מוחלט */
-    top: 10px; /* רווח מהחלק העליון של הכרטיס */
-    left: 10px; /* רווח מהחלק השמאלי של הכרטיס */
-    width: 24px; /* גודל הצ'קבוקס */
-    height: 24px; /* גובה הצ'קבוקס */
-    cursor: pointer; /* משנה את הסמן בעת חיפוש על הצ'קבוקס */
-    background-color: #fff; /* רקע לבן */
-    border: 2px solid #ccc; /* גבול אפור */
-    border-radius: 4px; /* עגלגל את הקצוות */
+
+
+.chartContainer {
+    height: 300px; 
+    width: 100%;
+}
+/* כלל של תפריט ניווט + חיפוש בכדי שיהיו באותה שורה */
+
+
+
+/* עיצוב תפריט ניווט */
+.navbar {
+    display: flex;
+    justify-content: flex-start; /* אלמנטים בצד שמאל */
+    align-items: center;
+}
+
+/* עיצוב אלמנטים נוספים אם יש צורך */
+.navbar-nav {
+    display: flex;
+    justify-content: space-between;
 }
 
 
 
-/* סגנון של הסימון על הצ'קבוקס */
-.coin-checkbox:checked:before {
-    position: absolute;
-    top: -2px; /* להזיז את הסימון טיפה למעלה */
-    left: 0; /* להזיז את הסימון לצד שמאל */
-    font-size: 16px; /* גודל הסימן */
-    color: #fff; /* צבע הסימון לבן */
-    opacity: 1; /* מציג את הסימון */
-    transition: opacity 0.2s ease; /* אנימציה חלקה לשינוי */
-}
 
-/* כאשר הצ'קבוקס מסומן */
-.coin-checkbox:checked {
-    border: 2px solid #FFD700 !important; /* גבול צבע זהב כשהצ'קבוקס מסומן */
-}
-
-/* כאשר הצ'קבוקס לא מסומן */
-.coin-checkbox {
-    border: 2px solid #ccc !important; /* גבול אפור ברירת המחדל */
-}
