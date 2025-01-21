@@ -1,7 +1,7 @@
 "use strict";
 
 (async () => {
-    // קוד להפעלת טאב-ים
+    // Tab toggle function
     document.addEventListener("DOMContentLoaded", () => {
         const toggleSections = (sectionToShow) => {
             const sections = document.querySelectorAll("main section");
@@ -32,7 +32,7 @@
         toggleSections("coins");
     });
 
-    // שליפת נתונים מה-API
+    // Function to retrieve data from API
     const getData = async (url) => {
         try {
             const response = await fetch(url);
@@ -44,35 +44,35 @@
         }
     };
 
-    // הצגת כרטיסי המטבעות
+    // Function to display the coins cards on the page
     const renderCoins = async () => {
         try {
             let coins = await getData("https://api.coingecko.com/api/v3/coins/list");
-            coins = coins.slice(0, 100);  // בוחרים את 100 המטבעות הראשונים
-            
-            const selectedCoins = loadSelectedCoins(); // טוענים את המטבעות שנבחרו
+            coins = coins.slice(0, 100);
+
+            const selectedCoins = loadSelectedCoins();
 
             const html = coins
-            .map(
-                (coin) => `
-            <div class="card coin-card" style="width: 18rem;" data-coin-name="${coin.name}">
-                <div class="card-body">
-                    <h5 class="card-title">${coin.name}</h5>
-                    <p class="card-text"> ${coin.id}</p>
-                    <p class="card-text"></p>
-                    <button class="btn btn-primary more-info-btn" data-coin="${coin.id}">More Info</button>
-                </div>
-                <div class="form-check form-switch">
-                    <input class="form-check-input coin-switch" type="checkbox" role="switch" id="switch-${coin.id}">
-                    <label class="form-check-label" for="switch-${coin.id}"></label>
-                </div>
-            </div>`
-            )
-            .join("");
-    
-            document.getElementById("cards-container").innerHTML = html;
-    
+                .map(
+                    (coin) => `
+                    <div class="card coin-card" style="width: 18rem;" data-coin-name="${coin.name}">
+                        <div class="card-body">
+                            <h5 class="card-title">${coin.name}</h5>
+                            <p class="card-text"> ${coin.id}</p>
+                            <p class="card-text"></p>
+                            <button class="btn btn-primary more-info-btn" data-coin="${coin.id}">More Info</button>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input coin-switch" type="checkbox" role="switch" id="switch-${coin.id}">
+                            <label class="form-check-label" for="switch-${coin.id}"></label>
+                        </div>
+                    </div>`
+                )
+                .join("");
 
+            document.getElementById("cards-container").innerHTML = html;
+
+            // Marking the selected currencies
             selectedCoins.forEach((coinId) => {
                 const switchElement = document.getElementById(`switch-${coinId}`);
                 if (switchElement) {
@@ -82,7 +82,7 @@
 
             updateSelectedCoinsDisplay();
 
-            
+            // Listens for a click on the "More Info" button on each coin card
             document.querySelectorAll(".more-info-btn").forEach((button) => {
                 button.addEventListener("click", async (event) => {
                     const coinId = event.target.dataset.coin;
@@ -90,18 +90,17 @@
                     showCoinInfo(coinData);
                 });
             });
-    
-            // טיפול בבחירת מטבעות עם Switch
+
+            // Handling coins selection with Switch
             document.querySelectorAll('.coin-switch').forEach(function(switchElement) {
                 switchElement.addEventListener('change', function() {
-                    // עדכון תצוגת המטבעות שנבחרו
                     updateSelectedCoinsDisplay();
-            
-                    // סופר את כמות המטבעות המסומנים
+
+                    // Count the number of marked coins
                     let selectedCoins = document.querySelectorAll('.coin-switch:checked').length;
-            
+
                     if (selectedCoins > 5) {
-                        switchElement.checked = false; // מבטל את הסימון האחרון
+                        switchElement.checked = false; // Uncheck the last selected
                         alert("You can select up to 5 coins only.");
                     } else {
                         if (switchElement.checked) {
@@ -111,7 +110,7 @@
                         }
                     }
 
-                    saveSelectedCoins(); // שומרים את המטבעות שנבחרו
+                    saveSelectedCoins(); // Saving marked coins
                 });
             });
         } catch (error) {
@@ -119,15 +118,13 @@
         }
     };
 
-
-    
-    // עדכון תצוגת המטבעות שנבחרו
+    // Update the selected coins display
     const updateSelectedCoinsDisplay = () => {
-        const selectedCoins = loadSelectedCoins(); // טוענים את המטבעות שנבחרו
-        
+        const selectedCoins = loadSelectedCoins();
+
         const selectedCoinsContainer = document.getElementById('selected-coins-container');
-        selectedCoinsContainer.innerHTML = ''; // מחיקת התצוגה הקודמת
-    
+        selectedCoinsContainer.innerHTML = '';
+
         selectedCoins.forEach(coinId => {
             const coinElement = document.createElement('div');
             coinElement.classList.add('selected-coin');
@@ -136,7 +133,7 @@
         });
     };
 
-    // הצגת מידע על מטבע במודל
+    // Display currency information in the modal
     const showCoinInfo = (coin) => {
         const modalHtml = `
             <div class="modal fade" id="coinModal" tabindex="-1" aria-hidden="true">
@@ -167,21 +164,21 @@
         });
     };
 
-    // שמירה של המטבעות שנבחרו ב-localStorage
+    // Saving the selected coins in localStorage
     const saveSelectedCoins = () => {
         const selectedCoins = Array.from(document.querySelectorAll('.coin-switch:checked')).map(switchElement => switchElement.id.split('-')[1]);
         localStorage.setItem('selectedCoins', JSON.stringify(selectedCoins));
     };
 
-    // טעינת המטבעות שנבחרו מתוך ה-localStorage
+    // Loading the selected coins from localStorage
     const loadSelectedCoins = () => {
         const savedCoins = localStorage.getItem('selectedCoins');
         return savedCoins ? JSON.parse(savedCoins) : [];
     };
 
-    // יצירת הגרף
-    let chart; // הגרף עצמו
-    let dataPoints = {}; // נקודות הנתונים
+    // Create the graph
+    let chart;
+    let dataPoints = {};
 
     const initializeChart = () => {
         chart = new CanvasJS.Chart("chartContainer", {
@@ -199,53 +196,53 @@
         chart.render();
     };
 
-    // עדכון הגרף
+    // Update the graph
     const updateChart = (data) => {
         const currentTime = new Date();
-    
+
         if (!chart) {
             console.error("Chart is not initialized yet.");
             return;
         }
-        console.log(data)
+
         Object.keys(data).forEach((coin, index) => {
-            // אם לא קיים קו עבור המטבע, נוסיף אותו
+            // If there is no line for the currency, we will add it
             if (!dataPoints[coin]) {
                 dataPoints[coin] = [];
                 chart.options.data.push({
                     type: "line",
-                    name: coin, // שם המטבע שיופיע בלגנד של הגרף
+                    name: coin,
                     showInLegend: true,
                     dataPoints: dataPoints[coin],
-                    color: getRandomColor(index), // צבע שונה לכל מטבע
+                    color: getRandomColor(index),
                 });
             }
-    
-            // עדכון נקודות הנתונים
+
+            // Update data points
             dataPoints[coin].push({
                 x: currentTime,
                 y: data[coin].USD
             });
-    
-            // אם יש יותר מדי נקודות, נרצה להוריד את הישנות ביותר
+
+            // If there are too many points, we want to remove the oldest ones
             if (dataPoints[coin].length > 30) {
                 dataPoints[coin].shift();
             }
         });
-    
+
         chart.render();
     };
 
-    // פונקציה שמחזירה צבע אקראי לכל מטבע
+    // Function that returns a random color for each coin
     const getRandomColor = (index) => {
         const colors = ["#FF5733", "#33FF57", "#3357FF", "#FF33A8", "#FF8C33"];
         return colors[index % colors.length];
     };
 
-    // אתחול הגרף לפני התחלת העדכון
+    // Initialize the graph before starting the update
     initializeChart();
 
-    // עדכון המחיר כל 2 שניות
+    // Update the price every 2 seconds
     setInterval(async () => {
         const selectedCoins = Array.from(document.querySelectorAll('.coin-switch:checked')).map(switchElement => switchElement.id.split('-')[1]);
         if (selectedCoins.length === 0) return;
@@ -257,25 +254,35 @@
         } catch (error) {
             console.error("Error fetching coin data:", error);
         }
-    }, 2000); // כל 2 שניות
+    }, 2000);
 })();
 
-// פונקציה להחלת חיפוש על המטבעות
+// Function to apply search to the coins
 const searchCoins = (searchText) => {
     const coins = document.querySelectorAll('.coin-card');
     coins.forEach((coin) => {
         const coinName = coin.getAttribute('data-coin-name').toLowerCase();
         if (coinName.includes(searchText.toLowerCase())) {
-            coin.style.display = 'block';  // הצגת המטבע
+            coin.style.display = 'block';  // Show the coin
         } else {
-            coin.style.display = 'none';  // הסתרת המטבע
+            coin.style.display = 'none';  // Hide the coin
         }
     });
 };
 
-// מאזין לשדה החיפוש
+// Listens to the search field
 document.getElementById("coinSearch").addEventListener("input", (e) => {
     const searchText = e.target.value;
-    searchCoins(searchText);  // הפעלת החיפוש
+    searchCoins(searchText);  // Perform the search
 });
 
+// Listener for clicking the search button
+document.getElementById("search-button").addEventListener("click", () => {
+    const searchText = document.getElementById("coinSearch").value;
+
+    if (searchText.trim() === "") {
+        alert("Please enter search text!");
+    } else {
+        searchCoins(searchText);
+    }
+});
