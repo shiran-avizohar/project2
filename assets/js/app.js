@@ -271,14 +271,14 @@ const searchCoins = (searchText) => {
 };
 
 // Listens to the search field
-document.getElementById("coinSearch").addEventListener("input", (e) => {
+document.getElementById("coin-search").addEventListener("input", (e) => {
     const searchText = e.target.value;
     searchCoins(searchText);  // Perform the search
 });
 
 // Listener for clicking the search button
 document.getElementById("search-button").addEventListener("click", () => {
-    const searchText = document.getElementById("coinSearch").value;
+    const searchText = document.getElementById("coin-search").value;
 
     if (searchText.trim() === "") {
         alert("Please enter search text!");
